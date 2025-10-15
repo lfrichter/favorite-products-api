@@ -1,0 +1,48 @@
+
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aiqfome-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - db
+    networks:
+      - aiqfome
+
+  db:
+    image: postgres:15-alpine
+    container_name: aiqfome-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-aiqfome}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_USER: ${DB_USERNAME:-admin}
+    volumes:
+      - ./docker-compose/postgres:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    networks:
+      - aiqfome
+
+  web:
+    image: nginx:alpine
+    container_name: aiqfome-web
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8000}:80"
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - aiqfome
+
+networks:
+  aiqfome:
+    driver: bridge
