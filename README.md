@@ -15,6 +15,7 @@ Ideal para prototipagem, testes de integração e como base para aplicações co
 | Autenticação   | Laravel Sanctum         |
 | Ambiente       | Docker + Docker Compose |
 | Testes         | Pest                    |
+| Documentação   | Swagger (OpenAPI)       |
 
 ---
 
@@ -25,7 +26,7 @@ Ideal para prototipagem, testes de integração e como base para aplicações co
 ```bash
 git clone https://github.com/lfrichter/favorite-products-api.git
 cd favorite-products-api
-````
+```
 
 ### 2. Configurar o ambiente
 
@@ -51,10 +52,30 @@ docker-compose exec app composer install
 docker-compose exec app php artisan key:generate
 ```
 
-### 6. Rodar migrações
+### 6. Rodar migrações e seeders
 
 ```bash
-docker-compose exec app php artisan migrate
+docker-compose exec app php artisan migrate:fresh --seed
+```
+
+---
+
+## 📚 Documentação da API (Swagger)
+
+A documentação completa da API foi gerada com Swagger e está disponível de forma interativa.
+
+### Como Acessar
+
+Após subir os containers, acesse a URL abaixo no seu navegador:
+
+[http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
+
+### Como Gerar a Documentação
+
+Para regenerar a documentação após fazer alterações nas anotações dos controllers, execute o comando:
+
+```bash
+docker-compose exec app php artisan l5-swagger:generate
 ```
 
 ---
@@ -64,21 +85,35 @@ docker-compose exec app php artisan migrate
 Rode a suíte de testes completa:
 
 ```bash
-docker-compose exec app php artisan test -v
+docker-compose exec app php artisan test
 ```
 
 ---
 
 ## 📚 Exemplos de Uso (cURL)
 
-### Autenticar e Obter Token
+### Criar um novo usuário
 
 ```bash
-curl -X POST http://localhost:8000/api/auth/login \
+curl -X POST http://localhost:8000/api/users \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "richter@castlevania.com",
-    "password": "password123"
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "password": "password"
+  }'
+```
+
+### Autenticar e Obter Token
+
+Utilize o usuário criado pelo seeder:
+
+```bash
+curl -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "luis@teste.com",
+    "password": "password"
   }'
 ```
 
@@ -113,6 +148,7 @@ curl -X DELETE http://localhost:8000/api/favorites/1 \
 * **Form Requests:** garantem validação e padronização das requisições.
 * **API Resources:** formatam as respostas de maneira consistente.
 * **Autenticação via Sanctum:** ideal para SPAs e apps móveis, leve e segura.
+* **Documentação com Swagger:** anotações nos controllers geram a documentação da API automaticamente, facilitando o consumo e a manutenção.
 
 ---
 
@@ -128,13 +164,27 @@ Os dados dos produtos são obtidos dinamicamente a partir da [Fake Store API](ht
 app/
  ├── Http/
  │   ├── Controllers/
+ │   │   └── Api/
+ │   │       ├── AuthController.php
+ │   │       ├── FavoriteProductController.php
+ │   │       ├── ProductController.php
+ │   │       └── UserController.php
  │   ├── Requests/
  │   └── Resources/
  ├── Models/
+ │   ├── FavoriteProduct.php
+ │   └── User.php
+ ├── Providers/
  ├── Services/
+ │   └── FakeStoreApiService.php
  └── ...
 database/
+ ├── factories/
  ├── migrations/
+ └── seeders/
+routes/
+ ├── api.php
+ └── ...
 tests/
  ├── Feature/
  └── Unit/
