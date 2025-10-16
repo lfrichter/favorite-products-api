@@ -7,6 +7,7 @@ use function Pest\Laravel\deleteJson;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
+use function Pest\Laravel\actingAs;
 
 it('can create a user', function () {
     $data = [
@@ -23,7 +24,8 @@ it('can create a user', function () {
 it('can get a user', function () {
     $user = User::factory()->create();
 
-    getJson("/api/users/{$user->id}")
+    actingAs($user)
+        ->getJson("/api/users/{$user->id}")
         ->assertOk()
         ->assertJsonFragment(['email' => $user->email]);
 });
@@ -35,7 +37,8 @@ it('can update a user', function () {
         'name' => 'Updated Name',
     ];
 
-    putJson("/api/users/{$user->id}", $data)
+    actingAs($user)
+        ->putJson("/api/users/{$user->id}", $data)
         ->assertOk()
         ->assertJsonFragment(['name' => 'Updated Name']);
 });
@@ -43,7 +46,8 @@ it('can update a user', function () {
 it('can delete a user', function () {
     $user = User::factory()->create();
 
-    deleteJson("/api/users/{$user->id}")
+    actingAs($user)
+        ->deleteJson("/api/users/{$user->id}")
         ->assertNoContent();
 
     $this->assertDatabaseMissing('users', ['id' => $user->id]);
