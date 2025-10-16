@@ -6,7 +6,7 @@
 A API precisa de um mecanismo de autenticação seguro para proteger seus endpoints. As requisições serão feitas por consumidores "first-party", como um Single Page Application (SPA) ou um aplicativo móvel desenvolvido pela própria equipe. O mecanismo precisa ser leve, seguro e bem integrado ao ecossistema Laravel.
 
 **Decisão:**
-A autenticação da API será implementada utilizando [Laravel Sanctum](https://laravel.com/docs/11.x/sanctum). Os usuários se autenticarão através de um endpoint de login que retornará um token de API opaco. Este token será então enviado no cabeçalho `Authorization` de requisições subsequentes para acessar rotas protegidas.
+A autenticação da API será implementada utilizando [Laravel Sanctum](https://laravel.com/docs/12.x/sanctum). Os usuários se autenticarão através de um endpoint de login que retornará um token de API opaco. Este token será então enviado no cabeçalho `Authorization` de requisições subsequentes para acessar rotas protegidas.
 
 **Consequências:**
 * **Positivas:**

@@ -6,7 +6,7 @@
 A validação de dados de entrada (`requests`) é uma parte crítica da segurança e integridade de qualquer API. Colocar a lógica de validação diretamente nos métodos dos controllers pode torná-los inchados ("Fat Controllers"), misturando responsabilidades (validação, autorização, lógica de negócio) e dificultando a leitura e a manutenção do código.
 
 **Decisão:**
-Toda a lógica de validação e autorização de requisições será encapsulada em [classes de `Form Request`](https://laravel.com/docs/11.x/validation#form-request-validation) dedicadas. O controller receberá a `Form Request` por injeção de dependência. Se a validação ou autorização falhar, o Laravel automaticamente retornará uma resposta de erro `422` ou `403`, respectivamente, antes que o código do controller seja executado.
+Toda a lógica de validação e autorização de requisições será encapsulada em [classes de `Form Request`](https://laravel.com/docs/12.x/validation#form-request-validation) dedicadas. O controller receberá a `Form Request` por injeção de dependência. Se a validação ou autorização falhar, o Laravel automaticamente retornará uma resposta de erro `422` ou `403`, respectivamente, antes que o código do controller seja executado.
 
 **Consequências:**
 * **Positivas:**

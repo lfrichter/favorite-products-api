@@ -6,7 +6,7 @@
 Uma API RESTful robusta precisa garantir um "contrato" de resposta estável e previsível para seus consumidores (como um frontend SPA ou um aplicativo móvel). Retornar modelos Eloquent diretamente pode expor dados sensíveis ou colunas internas do banco de dados (`password`, `remember_token`), além de criar um acoplamento forte entre a estrutura do banco de dados e a resposta da API. Qualquer alteração no banco de dados poderia quebrar os clientes da API de forma inesperada.
 
 **Decisão:**
-Todas as respostas da API que retornam dados de entidades (como `User`) serão formatadas através de [classes de `API Resource`](https://laravel.com/docs/11.x/eloquent-resources). Essas classes atuarão como uma camada de transformação, mapeando explicitamente os atributos do modelo para a estrutura JSON final da resposta.
+Todas as respostas da API que retornam dados de entidades (como `User`) serão formatadas através de [classes de `API Resource`](https://laravel.com/docs/12.x/eloquent-resources). Essas classes atuarão como uma camada de transformação, mapeando explicitamente os atributos do modelo para a estrutura JSON final da resposta.
 
 **Consequências:**
 * **Positivas:**
