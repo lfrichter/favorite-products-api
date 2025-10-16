@@ -164,11 +164,12 @@ curl -X DELETE http://localhost:8000/api/favorites/1 \
 
 ## 🧩 Decisões de Arquitetura
 
-* **Services:** toda a lógica de negócio e integração com a Fake Store API é isolada em `Services`, mantendo os `Controllers` enxutos.
-* **Form Requests:** garantem validação e padronização das requisições.
-* **API Resources:** formatam as respostas de maneira consistente.
-* **Autenticação via Sanctum:** ideal para SPAs e apps móveis, leve e segura.
-* **Documentação com Swagger:** anotações nos controllers geram a documentação da API automaticamente, facilitando o consumo e a manutenção.
+1. [**Services**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0001-classes-services-para-logica-de-negocio.md): toda a lógica de negócio e integração com a Fake Store API é isolada em `Services`, mantendo os `Controllers` enxutos.
+2. [**API Resources**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0002-uso-de-api-resources-para-padronizacao-de-respostas.md): formatam as respostas de maneira consistente.
+3. [**Form Requests**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0003-uso-de-form-requests-para-validacao-de-requisicoes.md): garantem validação e padronização das requisições.
+4. [**Autenticação via Sanctum**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0004-escolha-do-laravel-sanctum-para-autenticacao.md): ideal para SPAs e apps móveis, leve e segura.
+5. [**Documentação com Swagger**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0005-documentacao-com-openapi-swagger.md): anotações nos controllers geram a documentação da API automaticamente, facilitando o consumo e a manutenção.
+
 
 ---
 
