@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'fakestore' => [
+        'base_url' => env('FAKE_STORE_API_BASE_URL', 'https://fakestoreapi.com'),
+    ],
+
 ];
