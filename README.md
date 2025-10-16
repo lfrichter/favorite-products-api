@@ -79,12 +79,6 @@ docker-compose exec app php artisan migrate:fresh --seed
 
 A documentação completa da API foi gerada com Swagger e está disponível de forma interativa.
 
-### Como Acessar
-
-Após subir os containers, acesse a URL abaixo no seu navegador:
-
-[http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
-
 ### Como Gerar a Documentação
 
 Para regenerar a documentação após fazer alterações nas anotações dos controllers, execute o comando:
@@ -92,6 +86,12 @@ Para regenerar a documentação após fazer alterações nas anotações dos con
 ```bash
 docker-compose exec app php artisan l5-swagger:generate
 ```
+
+### Como Acessar
+
+Após subir os containers, acesse a URL abaixo no seu navegador:
+
+[http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
 
 
 !["Swagger API Documentation"](https://i.imgur.com/o7kWs3f.png)
@@ -105,6 +105,8 @@ Rode a suíte de testes completa:
 ```bash
 docker-compose exec app php artisan test
 ```
+
+!["Tests executed"](https://i.imgur.com/ZXfl7Ev.png)
 
 ---
 
