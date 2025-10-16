@@ -3,9 +3,24 @@
 Uma API RESTful construída com **Laravel** para gerenciar clientes e seus **produtos favoritos**, integrando-se à [Fake Store API](https://fakestoreapi.com/) para buscar dados reais de e-commerce.
 Ideal para prototipagem, testes de integração e como base para aplicações com *wishlists* (listas de desejos).
 
----
+!["Favourite Products API"](https://i.imgur.com/o5DPcMF.jpeg)
 
-## ⚙️ Tecnologias
+
+## 🧰 Tecnologias
+
+<p>
+  <img src="https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white" alt="PHP 8.3" />
+  <img src="https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white" alt="Laravel 12" />
+  <img src="https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL 15" />
+  <img src="https://img.shields.io/badge/Sanctum-Auth-FF2D20?logo=laravel&logoColor=white" alt="Laravel Sanctum" />
+  <img src="https://img.shields.io/badge/Pest-Testing-FF69B4?logo=laravel&logoColor=white" alt="Pest Testing" />
+  <img src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white" alt="Docker Compose" />
+  <img src="https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?logo=swagger&logoColor=black" alt="Swagger OpenAPI" />
+  <img src="https://img.shields.io/badge/Vite-Frontend-646CFF?logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/TailwindCSS-4.0-38B2AC?logo=tailwindcss&logoColor=white" alt="TailwindCSS 4.0" />
+  <img src="https://img.shields.io/badge/TypeScript-Support-3178C6?logo=typescript&logoColor=white" alt="TypeScript Support" />
+</p>
+
 
 | Categoria      | Tecnologia              |
 | -------------- | ----------------------- |
@@ -77,6 +92,9 @@ Para regenerar a documentação após fazer alterações nas anotações dos con
 ```bash
 docker-compose exec app php artisan l5-swagger:generate
 ```
+
+
+!["Swagger API Documentation"](https://i.imgur.com/o7kWs3f.png)
 
 ---
 
