@@ -39,6 +39,28 @@ it('cannot add a non-existent product to favorites', function () {
         ->postJson('/api/favorites', ['product_id' => 999])
         ->assertNotFound();
 });
+
+it('returns service unavailable when the external API fails on adding a favorite', function () {
+    Http::fake([
+        'fakestoreapi.com/*' => Http::response(null, 500),
+    ]);
+
+    actingAs($this->user)
+        ->postJson('/api/favorites', ['product_id' => 999])
+        ->assertStatus(503);
+});
+
+it('returns service unavailable when the external API fails on getting favorites', function () {
+    Http::fake([
+        'fakestoreapi.com/*' => Http::response(null, 500),
+    ]);
+
+    $this->user->favoriteProducts()->create(['product_id' => 1]);
+
+    actingAs($this->user)
+        ->getJson('/api/favorites')
+        ->assertStatus(503);
+});
 it('can get favorite products', function () {
     Http::fake([
         'fakestoreapi.com/*' => Http::response(['id' => 1, 'title' => 'Test Product'], 200),

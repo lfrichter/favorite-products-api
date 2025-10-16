@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Contracts\ProductServiceContract;
+use App\Exceptions\FakeStoreApiException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class FakeStoreApiService
+class FakeStoreApiService implements ProductServiceContract
 {
     private string $baseUrl;
 
@@ -19,29 +21,49 @@ class FakeStoreApiService
     {
         $response = Http::get("{$this->baseUrl}/products/{$productId}");
 
-        Log::info('Fake Store API Response: ' . $response->status() . ' ' . $response->body());
-
-        if ($response->successful()) {
-            return $response->json();
+        if ($response->status() === 404) {
+            return null;
         }
 
-        return null;
+        if ($response->failed()) {
+            Log::error("Falha ao buscar o produto na FakeStoreAPI.", [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
+            throw new FakeStoreApiException('Failed to fetch product from Fake Store API.');
+        }
+
+        return $response->json();
+    }
+
+    public function findProductsByIds(array $productIds): array
+    {
+        $products = [];
+
+        foreach ($productIds as $productId) {
+            $product = $this->findProductById($productId);
+            if ($product) {
+                $products[] = $product;
+            }
+        }
+
+        return $products;
     }
 
     public function getAllProducts(): array
-    {
+    { 
         $response = Http::get("{$this->baseUrl}/products");
 
-        if ($response->successful()) {
-            return $response->json();
+        if ($response->failed()) {
+            Log::error("Falha ao buscar a lista de produtos na FakeStoreAPI.", [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
+            throw new FakeStoreApiException('Failed to fetch products from Fake Store API.');
         }
 
-        Log::error("Falha ao buscar a lista de produtos na FakeStoreAPI.", [
-            'status' => $response->status(),
-            'body' => $response->body(),
-        ]);
-
-        // Retorna um array vazio em caso de falha para evitar erros no controller
-        return [];
+        return $response->json();
     }
 }

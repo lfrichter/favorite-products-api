@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\ProductServiceContract;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreFavoriteProductRequest;
 use App\Models\FavoriteProduct;
-use App\Services\FakeStoreApiService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -13,7 +14,7 @@ use Illuminate\Http\Response;
  */
 class FavoriteProductController extends Controller
 {
-    public function __construct(private FakeStoreApiService $fakeStoreApiService) { }
+    public function __construct(private ProductServiceContract $fakeStoreApiService) { }
 
     /**
      * @OA\Get(
@@ -27,11 +28,9 @@ class FavoriteProductController extends Controller
      */
     public function index(Request $request)
     {
-        $favoriteProducts = $request->user()->favoriteProducts;
+        $favoriteProductIds = $request->user()->favoriteProducts()->pluck('product_id')->all();
 
-        $products = $favoriteProducts->map(function ($favoriteProduct) {
-            return $this->fakeStoreApiService->findProductById($favoriteProduct->product_id);
-        });
+        $products = $this->fakeStoreApiService->findProductsByIds($favoriteProductIds);
 
         return response()->json($products);
     }
@@ -54,9 +53,9 @@ class FavoriteProductController extends Controller
      *     @OA\Response(response=404, description="Product not found")
      * )
      */
-    public function store(Request $request)
+    public function store(StoreFavoriteProductRequest $request)
     {
-        $productId = $request->validate(['product_id' => 'required|integer'])['product_id'];
+        $productId = $request->validated()['product_id'];
 
         if (!$this->fakeStoreApiService->findProductById($productId)) {
             return response()->json(['message' => 'Product not found.'], Response::HTTP_NOT_FOUND);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\ProductServiceContract;
 use App\Http\Controllers\Controller;
 use App\Services\FakeStoreApiService;
 use Illuminate\Http\JsonResponse;
@@ -11,7 +12,7 @@ use Illuminate\Http\JsonResponse;
  */
 class ProductController extends Controller
 {
-    public function __construct(protected FakeStoreApiService $fakeStoreApi) {}
+    public function __construct(protected ProductServiceContract $fakeStoreApi) {}
 
     /**
      * @OA\Get(
