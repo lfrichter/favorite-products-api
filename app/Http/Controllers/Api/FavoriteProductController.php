@@ -6,6 +6,7 @@ use App\Contracts\ProductServiceContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFavoriteProductRequest;
 use App\Models\FavoriteProduct;
+use App\Services\FavoriteProductService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -14,7 +15,10 @@ use Illuminate\Http\Response;
  */
 class FavoriteProductController extends Controller
 {
-    public function __construct(private ProductServiceContract $fakeStoreApiService) { }
+    public function __construct(
+        private readonly ProductServiceContract $fakeStoreApiService,
+        private readonly FavoriteProductService $favoriteProductService
+    ) { }
 
     /**
      * @OA\Get(
@@ -28,9 +32,7 @@ class FavoriteProductController extends Controller
      */
     public function index(Request $request)
     {
-        $favoriteProductIds = $request->user()->favoriteProducts()->pluck('product_id')->all();
-
-        $products = $this->fakeStoreApiService->findProductsByIds($favoriteProductIds);
+        $products = $this->favoriteProductService->getFavoriteProducts($request->user());
 
         return response()->json($products);
     }

@@ -2,6 +2,7 @@
 
 uses(Tests\TestCase::class, Illuminate\Foundation\Testing\RefreshDatabase::class);
 
+use App\Contracts\ProductServiceContract;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use function Pest\Laravel\actingAs;
@@ -10,15 +11,17 @@ use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use Illuminate\Support\Facades\DB;
 
-
 beforeEach(function () {
     $this->user = User::factory()->create();
+
+    $this->productServiceMock = $this->mock(ProductServiceContract::class);
+    $this->app->instance(ProductServiceContract::class, $this->productServiceMock);
 });
 
 it('can add a product to favorites', function () {
-    Http::fake([
-        'fakestoreapi.com/*' => Http::response(['id' => 1, 'title' => 'Test Product'], 200),
-    ]);
+    $this->productServiceMock->shouldReceive('findProductById')
+        ->with(1)
+        ->andReturn(['id' => 1, 'title' => 'Test Product']);
 
     actingAs($this->user)
         ->postJson('/api/favorites', ['product_id' => 1])
@@ -31,9 +34,9 @@ it('can add a product to favorites', function () {
 });
 
 it('cannot add a non-existent product to favorites', function () {
-    Http::fake([
-        'fakestoreapi.com/*' => Http::response(null, 404),
-    ]);
+    $this->productServiceMock->shouldReceive('findProductById')
+        ->with(999)
+        ->andReturn(null);
 
     actingAs($this->user)
         ->postJson('/api/favorites', ['product_id' => 999])
@@ -41,9 +44,9 @@ it('cannot add a non-existent product to favorites', function () {
 });
 
 it('returns service unavailable when the external API fails on adding a favorite', function () {
-    Http::fake([
-        'fakestoreapi.com/*' => Http::response(null, 500),
-    ]);
+    $this->productServiceMock->shouldReceive('findProductById')
+        ->with(999)
+        ->andThrow(new App\Exceptions\FakeStoreApiException());
 
     actingAs($this->user)
         ->postJson('/api/favorites', ['product_id' => 999])
@@ -51,9 +54,8 @@ it('returns service unavailable when the external API fails on adding a favorite
 });
 
 it('returns service unavailable when the external API fails on getting favorites', function () {
-    Http::fake([
-        'fakestoreapi.com/*' => Http::response(null, 500),
-    ]);
+    $this->productServiceMock->shouldReceive('findProductsByIds')
+        ->andThrow(new App\Exceptions\FakeStoreApiException());
 
     $this->user->favoriteProducts()->create(['product_id' => 1]);
 
@@ -62,9 +64,8 @@ it('returns service unavailable when the external API fails on getting favorites
         ->assertStatus(503);
 });
 it('can get favorite products', function () {
-    Http::fake([
-        'fakestoreapi.com/*' => Http::response(['id' => 1, 'title' => 'Test Product'], 200),
-    ]);
+    $this->productServiceMock->shouldReceive('findProductsByIds')
+        ->andReturn([['id' => 1, 'title' => 'Test Product', 'price' => 10.0, 'description' => 'desc', 'category' => 'cat', 'image' => 'img', 'rating' => ['rate' => 4.0, 'count' => 10]]]);
 
     $this->user->favoriteProducts()->create(['product_id' => 1]);
 

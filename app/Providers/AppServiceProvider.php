@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Contracts\ProductServiceContract;
 use App\Services\FakeStoreApiService;
+use App\Services\FavoriteProductService;
 use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,6 +19,12 @@ class AppServiceProvider extends ServiceProvider
             return new FakeStoreApiService(
                 $app->make(HttpClient::class),
                 config('services.fakestore.base_url')
+            );
+        });
+
+        $this->app->singleton(FavoriteProductService::class, function ($app) {
+            return new FavoriteProductService(
+                $app->make(ProductServiceContract::class)
             );
         });
     }
