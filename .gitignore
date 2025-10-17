@@ -27,3 +27,4 @@ Homestead.yaml
 Thumbs.db
 /docker-compose/
 /public/images/FavouriteProductsAPI-Tests-2-2025-10-16 at 15.26.46.png
+.env.testing
