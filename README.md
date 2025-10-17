@@ -222,17 +222,13 @@ database/
  └── seeders/
 docs/
  ├── adr/
+ │   │
+ │   ├── ...
  │   ├── 0006-uso-de-contrato-interface-para-o-servico-de-produtos.md
  │   ├── 0007-refatoracao-do-servico-de-produtos-para-desempenho-e-testabilidade.md
  │   ├── 0008-tratamento-explicito-de-falhas-em-servicos-externos.md
  │   └── 0009-orquestracao-de-logica-de-negocio-com-servicos-e-dtos.md
- ├── refactoring/
- │   ├── 1. SRP nos Controllers.md
- │   ├── 2-acoplamento-direto-ao-http-facade-no-servico.md
- │   ├── 3-tratamento-de-erros-e-excecoes.md
- │   ├── 4-logica-de-negocio-no-controller.md
- │   └── 4.1-Ajuste-na-Logica-de-Negocio-Controller-2.md
- └── snapshot-2025-16-10--19-36.md
+ └
 routes/
  ├── api.php
  └── ...
