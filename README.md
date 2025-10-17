@@ -106,7 +106,7 @@ Rode a suíte de testes completa:
 docker-compose exec app php artisan test
 ```
 
-!["Tests executed"](https://i.imgur.com/ZXfl7Ev.png)
+!["Tests executed"](https://i.imgur.com/R2QTfNR.png)
 
 ---
 
@@ -188,6 +188,12 @@ Os dados dos produtos são obtidos dinamicamente a partir da [Fake Store API](ht
 
 ```
 app/
+ ├── Contracts/
+ │   └── ProductServiceContract.php
+ ├── DTOs/
+ │   └── ProductDTO.php
+ ├── Exceptions/
+ │   └── FakeStoreApiException.php
  ├── Http/
  │   ├── Controllers/
  │   │   └── Api/
@@ -196,23 +202,46 @@ app/
  │   │       ├── ProductController.php
  │   │       └── UserController.php
  │   ├── Requests/
+ │   │   ├── StoreFavoriteProductRequest.php
+ │   │   ├── StoreUserRequest.php
+ │   │   └── UpdateUserRequest.php
  │   └── Resources/
+ │       └── UserResource.php
  ├── Models/
  │   ├── FavoriteProduct.php
  │   └── User.php
  ├── Providers/
+ │   └── AppServiceProvider.php
  ├── Services/
- │   └── FakeStoreApiService.php
+ │   ├── FakeStoreApiService.php
+ │   └── FavoriteProductService.php
  └── ...
 database/
  ├── factories/
  ├── migrations/
  └── seeders/
+docs/
+ ├── adr/
+ │   ├── 0006-uso-de-contrato-interface-para-o-servico-de-produtos.md
+ │   ├── 0007-refatoracao-do-servico-de-produtos-para-desempenho-e-testabilidade.md
+ │   ├── 0008-tratamento-explicito-de-falhas-em-servicos-externos.md
+ │   └── 0009-orquestracao-de-logica-de-negocio-com-servicos-e-dtos.md
+ ├── refactoring/
+ │   ├── 1. SRP nos Controllers.md
+ │   ├── 2-acoplamento-direto-ao-http-facade-no-servico.md
+ │   ├── 3-tratamento-de-erros-e-excecoes.md
+ │   ├── 4-logica-de-negocio-no-controller.md
+ │   └── 4.1-Ajuste-na-Logica-de-Negocio-Controller-2.md
+ └── snapshot-2025-16-10--19-36.md
 routes/
  ├── api.php
  └── ...
 tests/
  ├── Feature/
+ │   ├── AuthTest.php
+ │   ├── FavoriteProductTest.php
+ │   ├── RouteTest.php
+ │   └── UserTest.php
  └── Unit/
 ```
 
