@@ -241,6 +241,57 @@ tests/
  └── Unit/
 ```
 
+## 🗺️ Diagrama da Arquitetura
+
+```mermaid
+graph TD
+    subgraph "Cliente (SPA / Mobile App)"
+        Client[📱/💻 Frontend]
+    end
+
+    subgraph "Favorite Products API (Servidor Laravel em Docker)"
+        Router["1\. Roteador API <br> (api.php)"]
+        Middleware["2\. Middleware Sanctum <br> (Autenticação)"]
+        Controller["4\. Controller <br> (Ex: FavoriteProductController)"]
+        FormRequest["3\. Form Request <br> (Validação & Autorização)"]
+        Service["5\. Camada de Serviço <br> (Ex: FavoriteProductService)"]
+        Contract["6\. Contrato <br> (ProductServiceContract)"]
+        ApiResource["8\. API Resource <br> (Formatação JSON)"]
+        DB["(🗄️ PostgreSQL)"]
+
+        subgraph "Implementação do Contrato"
+            FakeStoreService["7\. FakeStoreApiService"]
+        end
+
+        subgraph "Tratamento de Exceções"
+            Handler[Handler Global]
+            CustomException{Exceção Customizada}
+        end
+    end
+
+    subgraph "Serviço Externo"
+        FakeStoreAPI[🌐 Fake Store API]
+    end
+
+    Client --"Requisição HTTP com Token"--> Router
+    Router --> Middleware
+    Middleware --> FormRequest
+    FormRequest --> Controller
+    Controller --> Service
+    Service --"Busca IDs de favoritos"--> DB
+    Service --"Solicita detalhes via interface"--> Contract
+    Contract --"Injetado pelo Service Container"--> FakeStoreService
+    FakeStoreService --"Busca produtos em lote"--> FakeStoreAPI
+    FakeStoreAPI --"Dados brutos dos produtos"--> FakeStoreService
+    FakeStoreService --"Lança exceção em caso de falha"--> CustomException
+    CustomException --"Capturada por"--> Handler
+    Handler --"Resposta HTTP 503"--> Client
+    FakeStoreService --"Retorna DTOs"--> Service
+    Service --"Retorna dados orquestrados"--> Controller
+    Controller --"Passa dados para"--> ApiResource
+    ApiResource --"Resposta JSON padronizada (200 OK)"--> Client
+```
+
 ## 🧠 Autor
 
 Desenvolvido por **Luis Fernando Richter**
