@@ -100,7 +100,20 @@ Após subir os containers, acesse a URL abaixo no seu navegador:
 
 ## 🧪 Testes
 
-Rode a suíte de testes completa:
+Antes de rodar os testes pela primeira vez, configure o ambiente de teste:
+
+```bash
+# 1. Crie o arquivo de ambiente a partir do exemplo
+cp .env.testing.example .env.testing
+
+# 2. Gere uma chave de aplicativo segura (necessária para criptografia nos testes)
+docker-compose exec app php artisan key:generate --env=testing
+```
+
+> 💡 Esses passos só precisam ser feitos uma vez por ambiente de desenvolvimento.
+
+
+Em seguida, execute a suíte de testes:
 
 ```bash
 docker-compose exec app php artisan test
