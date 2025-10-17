@@ -169,6 +169,11 @@ curl -X DELETE http://localhost:8000/api/favorites/1 \
 3. [**Form Requests**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0003-uso-de-form-requests-para-validacao-de-requisicoes.md): garantem validação e padronização das requisições.
 4. [**Autenticação via Sanctum**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0004-escolha-do-laravel-sanctum-para-autenticacao.md): ideal para SPAs e apps móveis, leve e segura.
 5. [**Documentação com Swagger**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0005-documentacao-com-openapi-swagger.md): anotações nos controllers geram a documentação da API automaticamente, facilitando o consumo e a manutenção.
+6.  [**Inversão de Dependência (Contracts)**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0006-uso-de-contrato-interface-para-o-servico-de-produtos.md): uso de interfaces para desacoplar os controllers das implementações concretas, facilitando testes e futuras extensões.
+7.  [**Otimização de Desempenho e Testabilidade (Services)**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0007-refatoracao-do-servico-de-produtos-para-desempenho-e-testabilidade.md): refatoração para resolver N+1 queries e melhorar o isolamento para testes.
+8.  [**Tratamento Explícito de Falhas**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0008-tratamento-explicito-de-falhas-em-servicos-externos.md): uso de exceções customizadas para comunicar falhas em integrações, evitando respostas silenciosas.
+9.  [**Orquestração com Services e DTOs**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0009-orquestracao-de-logica-de-negocio-com-servicos-e-dtos.md): extração da lógica de negócio para serviços dedicados e uso de DTOs para garantir um contrato de dados robusto e desacoplado.
+10. [**Autorização Baseada em Proprietário (IDOR)**](https://github.com/lfrichter/favorite-products-api/blob/main/docs/adr/0010-implementacao-de-autorizacao-baseada-em-proprietario-nos-form-requests.md): centralização da lógica de autorização nos Form Requests para prevenir a vulnerabilidade IDOR.
 
 
 ---
