@@ -3,6 +3,7 @@
 uses(Tests\TestCase::class, Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 use App\Contracts\ProductServiceContract;
+use App\DTOs\ProductDTO;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use function Pest\Laravel\actingAs;
@@ -21,7 +22,15 @@ beforeEach(function () {
 it('can add a product to favorites', function () {
     $this->productServiceMock->shouldReceive('findProductById')
         ->with(1)
-        ->andReturn(['id' => 1, 'title' => 'Test Product']);
+        ->andReturn(new ProductDTO(
+            id: 1,
+            title: 'Test Product',
+            price: 10.0,
+            description: 'description',
+            category: 'category',
+            image: 'image',
+            rating: ['rate' => 4.0, 'count' => 10]
+        ));
 
     actingAs($this->user)
         ->postJson('/api/favorites', ['product_id' => 1])
