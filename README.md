@@ -244,52 +244,69 @@ tests/
 ## 🗺️ Diagrama da Arquitetura
 
 ```mermaid
-graph TD
-    subgraph "Cliente (SPA / Mobile App)"
-        Client[📱/💻 Frontend]
+---
+config:
+  theme: default
+  look: handDrawn
+---
+flowchart TD
+    %% --- CLIENTE ---
+    subgraph C["👤 Cliente"]
+        style C fill:#cce5ff,stroke:#007bff,stroke-width:1px
+        Client["Frontend (SPA / Mobile App)"]
     end
 
-    subgraph "Favorite Products API (Servidor Laravel em Docker)"
-        Router["1\. Roteador API <br> (api.php)"]
-        Middleware["2\. Middleware Sanctum <br> (Autenticação)"]
-        Controller["4\. Controller <br> (Ex: FavoriteProductController)"]
-        FormRequest["3\. Form Request <br> (Validação & Autorização)"]
-        Service["5\. Camada de Serviço <br> (Ex: FavoriteProductService)"]
-        Contract["6\. Contrato <br> (ProductServiceContract)"]
-        ApiResource["8\. API Resource <br> (Formatação JSON)"]
-        DB["(🗄️ PostgreSQL)"]
+    %% --- API ---
+    subgraph A["🧩 Favorite Products API<br>(Laravel + Docker)"]
+        style A fill:#e6ffe6,stroke:#28a745,stroke-width:1px
 
-        subgraph "Implementação do Contrato"
-            FakeStoreService["7\. FakeStoreApiService"]
+        Router["1\. Roteador API<br>(api.php)"]
+        Middleware["2\. Middleware Sanctum<br>(Autenticação)"]
+        FormRequest["3\. Form Request<br>(Validação \/ Autorização)"]
+        Controller["4\. Controller<br>(FavoriteProductController)"]
+        Service["5\. Camada de Serviço<br>(FavoriteProductService)"]
+        Contract["6\. Contrato<br>(ProductServiceContract)"]
+        ApiResource["7\. API Resource<br>(Formatação JSON)"]
+        DB["🗄️ PostgreSQL"]
+
+        subgraph Impl["🔌 Implementação do Contrato"]
+            style Impl fill:#ffffe6,stroke:#b3b300,stroke-width:1px
+            FakeStoreService["FakeStoreApiService"]
         end
 
-        subgraph "Tratamento de Exceções"
-            Handler[Handler Global]
-            CustomException{Exceção Customizada}
+        subgraph Err["🚨 Tratamento de Exceções"]
+            style Err fill:#ffe6e6,stroke:#dc3545,stroke-width:1px
+            Handler["Handler Global"]
+            CustomException{"Exceção Customizada"}
         end
     end
 
-    subgraph "Serviço Externo"
-        FakeStoreAPI[🌐 Fake Store API]
+    %% --- SERVIÇO EXTERNO ---
+    subgraph E["🌐 Serviço Externo"]
+        style E fill:#f2f2f2,stroke:#6c757d,stroke-width:1px
+        FakeStoreAPI["Fake Store API"]
     end
 
-    Client --"Requisição HTTP com Token"--> Router
+    %% --- FLUXO PRINCIPAL ---
+    Client -- "HTTP + Token" --> Router
     Router --> Middleware
     Middleware --> FormRequest
     FormRequest --> Controller
     Controller --> Service
-    Service --"Busca IDs de favoritos"--> DB
-    Service --"Solicita detalhes via interface"--> Contract
-    Contract --"Injetado pelo Service Container"--> FakeStoreService
-    FakeStoreService --"Busca produtos em lote"--> FakeStoreAPI
-    FakeStoreAPI --"Dados brutos dos produtos"--> FakeStoreService
-    FakeStoreService --"Lança exceção em caso de falha"--> CustomException
-    CustomException --"Capturada por"--> Handler
-    Handler --"Resposta HTTP 503"--> Client
-    FakeStoreService --"Retorna DTOs"--> Service
-    Service --"Retorna dados orquestrados"--> Controller
-    Controller --"Passa dados para"--> ApiResource
-    ApiResource --"Resposta JSON padronizada (200 OK)"--> Client
+    Service --> DB
+    Service --> Contract
+    Contract --> FakeStoreService
+    FakeStoreService --> FakeStoreAPI
+    FakeStoreAPI --> FakeStoreService
+    FakeStoreService --> Service
+    Service --> Controller
+    Controller --> ApiResource
+    ApiResource --> Client
+
+    %% --- FLUXO DE EXCEÇÕES ---
+    FakeStoreService -- "Falha na requisição" --> CustomException
+    CustomException --> Handler
+    Handler -- "Resposta HTTP 503" --> Client
 ```
 
 ## 🧠 Autor
